@@ -15,6 +15,7 @@ les avions de fret,
 mais il en existe d’autres (avions militaires, jets privés, etc.).
 Le cœur de l’application consiste à traiter l’information relative aux vols opérés par ces avions.
 Les vols consistent tout d’abord à tracer le déplacement des avions d’un aéroport de départ à un aéroport d’arrivée. 
+
 Les compagnies utilisent toutes les informations standards pour représenter les aéroports dans leur jeu de données : 
 le code de l’aéroport (ex : ”BWI”) ainsi que 
 la ville et 
@@ -25,6 +26,7 @@ l’heure d’arrivée,
 la distance parcourue, 
 l’avion qui effectue le vol ainsi qu’
 un pilote. 
+
 Les compagnies aériennes disposent également de données relatives à des personnes. Ces personnes sont les 
 passagers et les 
 pilotes. 
@@ -33,15 +35,20 @@ nom,
 un prénom, 
 une adresse (rue, numéro, CP, état) et un 
 champ indiquant s’ils sont des voyageurs fréquents. 
+
 Les pilotes sont caractérisés par un 
 nom, un 
 prénom, une 
-adresse (rue, numéro, CP, état) un numéro de licence. Notez qu’il est possible que les pilotes voyagent comme passagers sur les vols qu’ils n’assurent pas, par exemple pour rentrer chez eux.
+adresse (rue, numéro, CP, état) 
+un numéro de licence. Notez qu’il est possible que les pilotes voyagent comme passagers sur les vols qu’ils n’assurent pas, par exemple pour rentrer chez eux.
+
 Les avions de ligne disposent d’une capacité fixe exprimée en sièges. Chaque avion dispose d’une certaine 
 quantité de ces sièges et chacun de ceux-ci sont attribués à un unique passager sur chaque vol. 
+
 Les sièges sont identifiés par un 
 numéro de rangée et 
 une lettre, et leur attribution à un passager peut se faire sur réservation moyennant un paiement (dont on souhaite garder une trace du montant). 
+
 Le avions de frets se caractérisent par un tonnage maximum. 
 Nous ne disposons d’aucune caractéristique spécifique pour les autres types d’avions, et souhaitons uniquement stocker leurs trajets. 
 Il vous incombe de proposer un modèle qui satisfasse à ce besoin. Notez qu’il existe plus d’une solution, l’important étant que votre modèle reprenne un maximum de contraintes d’intégrité et qu’il soit justifié.
