@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>3</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>129</x>
+      <y>267</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>Company
+--
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>297</x>
+      <y>267</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>Airport
+--
+_AirportCode_
+City
+State</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>129</x>
+      <y>372</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>Aircraft
+--
+_VehicleIdentificationNumber_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>288</x>
+      <y>372</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>Flight
+--
+_FlightId_
+DepartureAirportCode
+DepartureTime
+ArrivalAirportCode
+ArrivalTime
+Itinerary
+ItineraryDistance
+bg=cyan
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>450</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>Pilot
+--
+LicenceNumber
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>198</x>
+      <y>453</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>Cargo
+--
+MaximumTonnage</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>456</x>
+      <y>450</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>Passenger
+--
+FrequentTraveler(0,1)
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>129</x>
+      <y>453</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>Airliner
+--
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>453</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>OtherAirplane
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>408</x>
+      <y>363</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>PersonOnBoard
+--
+Name
+Firstname
+Adress
+	-street
+	-number
+	-CP
+	-State
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>297</x>
+      <y>444</y>
+      <w>36</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>assigned to
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>222</x>
+      <y>366</y>
+      <w>36</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>makes
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>447</y>
+      <w>36</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>m1=(1,2)</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>426</y>
+      <w>15</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>m1=0..n</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>435</x>
+      <y>417</y>
+      <w>15</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+(t,e)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>390</x>
+      <y>432</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;60.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>435</x>
+      <y>432</y>
+      <w>57</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;170.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>426</y>
+      <w>15</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+(t,e)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>87</x>
+      <y>435</y>
+      <w>78</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;60.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>435</y>
+      <w>78</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>240.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>435</y>
+      <w>9</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>255</x>
+      <y>369</y>
+      <w>39</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>m1=(0,1)</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>189</x>
+      <y>369</y>
+      <w>39</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>m1=(1,1)</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>222</x>
+      <y>261</y>
+      <w>36</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>owns
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>255</x>
+      <y>264</y>
+      <w>48</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>m1=(0,n)</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>348</y>
+      <w>18</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>m1=(1,n)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>141</x>
+      <y>339</y>
+      <w>36</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>owns
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>321</y>
+      <w>18</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>m1=(1,1)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>189</x>
+      <y>264</y>
+      <w>39</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>m1=(1,1)</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>288</x>
+      <y>537</y>
+      <w>36</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>assigned to
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>129</x>
+      <y>543</y>
+      <w>63</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>Seat
+--
+_RowNumber_
+_Letter_
+FlightPrice</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>141</x>
+      <y>519</y>
+      <w>36</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>contains
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>507</y>
+      <w>18</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>m1=(1,1)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>528</y>
+      <w>18</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>m1=(1,n)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>189</x>
+      <y>540</y>
+      <w>105</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>m1=(1,1)</panel_attributes>
+    <additional_attributes>10.0;10.0;330.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>321</x>
+      <y>504</y>
+      <w>171</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>m1=(0,1)</panel_attributes>
+    <additional_attributes>10.0;130.0;550.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>285</x>
+      <y>549</y>
+      <w>48</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>Booking</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
