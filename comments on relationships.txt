@@ -1,0 +1,14 @@
+{1 company owns 1,n aircraft
+1 aircraft is owned by 0,n company}
+
+{1 aircraft is either 
+	an airliner or 
+	a cargo 
+		MaximumTonnage
+	(company not concerned by other types)}
+
+{1 aircraft is flied by 0,2 pilot (copilot)
+1 pilot flies 0,1 aircraft}
+
+{ 
+ 
