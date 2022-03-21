@@ -1,0 +1,27 @@
+name: docx-pandoc-pdf
+on: [push]
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v1
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: ./*.dockx
+  convert_via_pandoc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker://pandoc/core:2.9
+        with:
+          args: >-
+            -s ./*.dockx
+            -f dockx
+            -t pdf
+            -o file.pdf
+      - uses: actions/upload-artifact@master
+        with:
+          name: file
+          path: file.pdf
