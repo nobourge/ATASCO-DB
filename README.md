@@ -90,4 +90,4 @@ https://www.transtats.bts.gov/DL_SelectFields.asp?gnoyr_VQ=FIL&QO_fu146_anzr=Nv4
 
 BON TRAVAIL !
 
-![Visualization of the repository visualizer diagram](./repository-diagram.svg)
+![Visualization of the repository visualizer diagram](./diagram.svg)
