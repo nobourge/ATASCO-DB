@@ -6,6 +6,8 @@ Partie I
 Schéma - modèle entité-association
 
 ATASCO-entity-relationship-diagram
+![Visualization of the repository visualizer diagram](./diagram.svg)
+
 ![Visualization of the ATASCO-entity-relationship-diagram](./diagram/ATASCO-entity-relationship-diagram.svg)
 ![Visualization of the ATASCO-entity-relationship-diagram](./diagram/ATASCO-entity-relationship-diagram.png)
 
