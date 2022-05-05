@@ -155,7 +155,7 @@ données fictives complémentaires à des fins d’exercice.
 ATASCO-entity-relationship-diagram            |  correction
 :-------------------------:|:-------------------------:
 ![Visualization of the ATASCO-entity-relationship-diagram.png](./design/entity-relationship/entity/diagram/ATASCO-entity-relationship-diagram.png)
-  | ./design/entity-relationship/entity/diagram/entities-correction-proposition.svg)
+  | ![Visualization of the entities-correction-proposition.svg](./design/entity-relationship/entity/diagram/entities-correction-proposition.svg)
   
   
 L’Air Travel Association for Statistics, Computing and Optimization (ATASCO) a reçu des données de différentes compagnies aériennes US, avec l’objectif d’aider ces compagnies à améliorer leurs offres et réduire leurs coûts.
