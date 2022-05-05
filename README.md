@@ -147,7 +147,6 @@ données fictives complémentaires à des fins d’exercice.
 ------------------------------------------------------------------------------------------------------------------------------------------
 
 ![Visualization of the ATASCO-entity-relationship-diagram.svg](./design/entity-relationship/entity/diagram/ATASCO-entity-relationship-diagram.svg)
-![Visualization of the ATASCO-entity-relationship-diagram.png](./design/entity-relationship/entity/diagram/ATASCO-entity-relationship-diagram.png)
 ![Visualization of the entities-correction-proposition.svg](./design/entity-relationship/entity/diagram/entities-correction-proposition.svg)
 
 

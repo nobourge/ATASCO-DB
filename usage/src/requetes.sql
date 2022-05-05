@@ -200,6 +200,86 @@ where aller.heuredépart::date = retour.heuredépart::date
 
 -- requete 7
 
+-- liste des vols
+select distinct réservation.volid
+from réservation;
+
+-- nombre de passagers par vol
+select count(voyageurid) as nombredepassager, réservation.volid
+from réservation
+group by réservation.volid;
+
+-- liste des vols avec < 20 passagers
+select count(réservation.voyageurid) as nombredepassager,  réservation.volid
+from réservation
+group by réservation.volid
+having count(réservation.voyageurid)<20;
+
+-- listes des avions comptant < 20 passagers
+select vol.avionid
+from vol
+join (
+    select count(réservation.voyageurid) as nombredepassager,  réservation.volid
+    from réservation
+    group by réservation.volid
+    having count(réservation.voyageurid)<20
+    ) as passagersvol
+on vol.id = passagersvol.volid;
+
+-- listes des compagnies proposant des vols < 20
+select avion.compagnieid
+from avion
+where avion.id in (
+    select vol.avionid
+    from vol
+    join (
+        select count(réservation.voyageurid) as nombredepassager, réservation.volid
+        from réservation
+        group by réservation.volid
+        having count(réservation.voyageurid)<20
+        ) as passagervol
+    on vol.id = passagervol.volid
+    );
+
+-- nombre moyen de sièges libres par vol de < 20 par id de compagnie
+select avion.compagnieid, avionpassager.nombredepassager
+from avion
+join (
+    select vol.avionid, passagervol.nombredepassager
+    from vol
+    join (
+        select count(réservation.voyageurid) as nombredepassager, réservation.volid
+        from réservation
+        group by réservation.volid
+        having count(réservation.voyageurid)<20
+        ) as passagervol
+    on passagervol.volid = vol.id
+    ) as avionpassager
+on avion.id = avionpassager.avionid;
+
+
+-- nombre moyen de sièges libres par vol de < 20 par nom de compagnie
+select avg(companyidpassager.nombredepassager), company.nom
+from company
+join(
+    select avion.compagnieid, avionpassager.nombredepassager
+    from avion
+    join (
+        select vol.avionid, passagervol.nombredepassager
+        from vol
+        join (
+            select count(réservation.voyageurid) as nombredepassager, réservation.volid
+            from réservation
+            group by réservation.volid
+            having count(réservation.voyageurid)<20
+            ) as passagervol
+        on passagervol.volid = vol.id
+        ) as avionpassager
+    on avion.id = avionpassager.avionid
+    ) as companyidpassager
+on company.id = companyidpassager.compagnieid
+group by company.nom;
+
 -- requete 8
 select count(vol.id) as nombredevol, vol.piloteid
 from vol
