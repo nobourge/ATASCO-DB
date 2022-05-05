@@ -148,7 +148,15 @@ données fictives complémentaires à des fins d’exercice.
 
 ![Visualization of the ATASCO-entity-relationship-diagram.svg](./design/entity-relationship/entity/diagram/ATASCO-entity-relationship-diagram.svg)
 ![Visualization of the ATASCO-entity-relationship-diagram.png](./design/entity-relationship/entity/diagram/ATASCO-entity-relationship-diagram.png)
+![Visualization of the entities-correction-proposition.svg](./design/entity-relationship/entity/diagram/entities-correction-proposition.svg)
 
+
+
+ATASCO-entity-relationship-diagram            |  correction
+:-------------------------:|:-------------------------:
+![](./design/entity-relationship/entity/diagram/ATASCO-entity-relationship-diagram.svg)| ![](./design/entity-relationship/entity/diagram/entities-correction-proposition.svg)
+  
+  
 L’Air Travel Association for Statistics, Computing and Optimization (ATASCO) a reçu des données de différentes compagnies aériennes US, avec l’objectif d’aider ces compagnies à améliorer leurs offres et réduire leurs coûts.
 L’association doit créer une base de données. La 1ère étape consiste à créer un modèle entité-association ainsi qu’un modèle relationnel.
 Après plusieurs entretiens avec les compagnies aériennes, le besoin a été défini comme suit :
