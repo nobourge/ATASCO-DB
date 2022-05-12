@@ -7,6 +7,12 @@ from vol,
 where vol.avionid = aviondefret.id;
 
 
+select count(voL.id)
+from vol
+where vol.avionid in (select aviondefret.id
+                      from aviondefret);
+
+
 -- requete 2
 
 -- nombre de vol avec un pilote en passager
@@ -42,16 +48,35 @@ select distinct réservation.volid
 from réservation;
 
 -- information sur le vol le plus peuplé v.1
-select *
+select vol.id, volleplusfrequenté.nombredepassager
 from vol
          join (
     select count(voyageurid) as nombredepassager, réservation.volid
     from réservation
     group by réservation.volid
     order by nombredepassager desc
-    limit 1
+    --limit 1
 ) as volleplusfrequenté
-              on vol.id = volleplusfrequenté.volid;
+              on vol.id = volleplusfrequenté.volid and volleplusfrequenté.nombredepassager = max(volleplusfrequenté.nombredepassager)
+
+
+select vol.id, vollesplusfrequenté.nombredepassager
+from vol
+         join (
+    select volid, nombredepassager
+    from (
+             select count(voyageurid) as nombredepassager, réservation.volid
+             from réservation
+             group by réservation.volid
+             order by nombredepassager desc
+         ) as volPassager
+    where volPassager.nombredepassager = (select count(voyageurid) as nombredepassager
+                                          from réservation
+                                          group by réservation.volid
+                                          order by nombredepassager desc
+                                          limit 1)
+) as vollesplusfrequenté
+              on vol.id = vollesplusfrequenté.volid;
 
 
 -- information sur le vol le plus peuplé v.2
@@ -67,7 +92,6 @@ where id = (
              limit 1
          ) as volleplusfrequenté
 );
-
 
 -- requete 4
 
@@ -100,15 +124,37 @@ where vol.avionid = aviondefret.id;
 
 
 -- listes des pilotes n'ayant conduit que des avions de ligne
-select distinct vol.piloteid
+select vol.piloteid
 from vol,
      aviondeligne
 where vol.avionid = aviondeligne.id
 except
-select distinct vol.piloteid
+select vol.piloteid
 from vol,
      aviondefret
 where vol.avionid = aviondefret.id;
+
+
+select distinct vol.piloteid
+from vol
+where vol.avionid in (select aviondeligne.id
+                      from aviondeligne)
+except
+select vol.piloteid
+from vol
+where vol.avionid in (select aviondefret.id
+                      from aviondefret);
+
+select count(distinct vol.piloteid)
+from vol
+where vol.avionid in (select aviondefret.id
+                      from aviondefret);
+
+select count(distinct vol.piloteid)
+from vol
+where vol.avionid in (select aviondeligne.id
+                      from aviondeligne);
+
 
 
 -- requete 5
@@ -197,88 +243,40 @@ where aller.heuredépart::date = retour.heuredépart::date
 
   and retour.heuredépart >= aller.heurearrivée + interval '7 hours';
 
+select distinct aller.id as volAller, aller.heuredépart::time, retour.id as volRetour, retour.heuredépart::time
+from vol as aller,
+     vol as retour
+where aller.heuredépart::time > '07:00:00'
+  and aller.heuredépart::date = retour.heuredépart::date
+  and retour.heuredépart >= aller.heurearrivée + '07:00:00'
+  and aller.aéroportarrivéecode = retour.aéroportdépartcode
+  and aller.aéroportdépartcode = retour.aéroportarrivéecode
+  and aller.avionid in (select aviondeligne.id from aviondeligne)
+  and retour.avionid in (select aviondeligne.id from aviondeligne);
 
 -- requete 7
 
--- liste des vols
-select distinct réservation.volid
-from réservation;
-
--- nombre de passagers par vol
-select count(voyageurid) as nombredepassager, réservation.volid
-from réservation
-group by réservation.volid;
-
--- liste des vols avec < 20 passagers
-select count(réservation.voyageurid) as nombredepassager,  réservation.volid
-from réservation
-group by réservation.volid
-having count(réservation.voyageurid)<20;
-
--- listes des avions comptant < 20 passagers
-select vol.avionid
-from vol
-join (
-    select count(réservation.voyageurid) as nombredepassager,  réservation.volid
-    from réservation
-    group by réservation.volid
-    having count(réservation.voyageurid)<20
-    ) as passagersvol
-on vol.id = passagersvol.volid;
-
--- listes des compagnies proposant des vols < 20
-select avion.compagnieid
-from avion
-where avion.id in (
-    select vol.avionid
-    from vol
-    join (
-        select count(réservation.voyageurid) as nombredepassager, réservation.volid
-        from réservation
-        group by réservation.volid
-        having count(réservation.voyageurid)<20
-        ) as passagervol
-    on vol.id = passagervol.volid
-    );
-
--- nombre moyen de sièges libres par vol de < 20 par id de compagnie
-select avion.compagnieid, avionpassager.nombredepassager
-from avion
-join (
-    select vol.avionid, passagervol.nombredepassager
-    from vol
-    join (
-        select count(réservation.voyageurid) as nombredepassager, réservation.volid
-        from réservation
-        group by réservation.volid
-        having count(réservation.voyageurid)<20
-        ) as passagervol
-    on passagervol.volid = vol.id
-    ) as avionpassager
-on avion.id = avionpassager.avionid;
-
-
--- nombre moyen de sièges libres par vol de < 20 par nom de compagnie
 select avg(companyidpassager.nombredepassager), company.nom
 from company
-join(
+         join(
     select avion.compagnieid, avionpassager.nombredepassager
     from avion
-    join (
+             join (
         select vol.avionid, passagervol.nombredepassager
         from vol
-        join (
+                 join (
             select count(réservation.voyageurid) as nombredepassager, réservation.volid
             from réservation
             group by réservation.volid
-            having count(réservation.voyageurid)<20
-            ) as passagervol
-        on passagervol.volid = vol.id
-        ) as avionpassager
-    on avion.id = avionpassager.avionid
-    ) as companyidpassager
-on company.id = companyidpassager.compagnieid
+            having count(réservation.voyageurid) < 20
+        ) as passagervol
+                      on passagervol.volid = vol.id
+    ) as avionpassager
+                  on avion.id = avionpassager.avionid
+) as companyidpassager
+             on company.id = companyidpassager.compagnieid
 group by company.nom;
+
 
 -- requete 8
 select count(vol.id) as nombredevol, vol.piloteid
@@ -315,15 +313,17 @@ from vol;
 
 select vol.piloteid,
        vol.heuredépart::date,
+       vol.heurearrivée::date,
        lag(vol.heuredépart::date)
        over (partition by vol.piloteid order by vol.heuredépart)
-from vol;
+from vol
+where vol.piloteid = 'be7ff385-25fa-4ee1-b467-8ea77995d2b3';
 
 -- lag -> précédant
 -- lead -> suivant
 
 -- comptage du nombre de vols consécutif par pilote
-select volspilotes.piloteid, count(piloteid) as jourssconsecutifs
+select volspilotes.piloteid, count(piloteid) + 1 as jourssconsecutifs   -- +1 pour rajouter le dernier vol
 from (
          select vol.piloteid, -- listes des vols groupé par pilotes et leur dernier vol
                 vol.heuredépart::date,
@@ -339,13 +339,74 @@ group by volspilotes.piloteid
 order by jourssconsecutifs desc;
 
 
+with volSuivant as (select distinct vol.piloteid,
+                                    vol.heuredépart::date,
+                                    row_number()
+                                    over (partition by vol.piloteid order by vol.heuredépart)                as joursConsecutifNum,
+                                    row_number() over (order by vol.piloteid)                                as num,
+                                    (row_number() over (order by vol.piloteid) -
+                                     row_number() over (partition by vol.piloteid order by vol.heuredépart)) as numDiff
+                    from vol
+)
+select row_number() over (partition by volSuivant.piloteid order by volSuivant.heuredépart) as joursConsécutif,
+       volSuivant.piloteid
+from volSuivant
+order by joursConsécutif desc;
+
+select distinct vol.heuredépart::date
+from vol
+where vol.piloteid = 'ce5834ca-a874-4d94-a59a-97389b6eb111'
+order by vol.heuredépart::date;
+
+
+with vols as (select vol.piloteid,
+                     row_number()
+                     over (partition by vol.piloteid order by vol.heuredépart) as volsConsécutifs,
+                     row_number() over (order by vol.piloteid)              as index,
+                     (row_number() over (order by vol.heuredépart) - row_number() over (partition by vol.piloteid order by vol.heuredépart)) as suite
+              from vol
+)
+select row_number() over (partition by vols.suite order by vols.piloteid) joursConsecutif, vols.piloteid
+from vols
+order by joursConsecutif desc;
+
+
+with volsEnchainés as (
+    select v.piloteid,
+           v.heuredépart::date,
+           dense_rank() over (order by v.heuredépart::date)                           as id,    -- utilisation de dense_rank pour éviter les gap
+           row_number() over (partition by v.piloteid order by v.heuredépart)         as Idinterne,
+           (dense_rank() over (order by v.heuredépart::date) -
+            row_number() over (partition by v.piloteid order by v.heuredépart::date)) as diffId
+    from (
+             select vol.piloteid,
+
+                    vol.heuredépart::date,
+                    lag(vol.heuredépart::date)
+                    over (partition by vol.piloteid order by vol.heuredépart::date) as départPrécédent
+             from vol) v
+    where v.départPrécédent is NULL or v.heuredépart > v.départPrécédent
+    order by v.piloteid, v.heuredépart::date
+)
+select max(vE.jours) as joursConsécutif, vE.piloteid
+from (
+         select count(volsEnchainés.diffId) as jours, volsEnchainés.piloteid
+         from volsEnchainés
+         group by volsEnchainés.piloteid, volsEnchainés.diffId
+     ) vE
+group by vE.piloteid
+order by joursConsécutif desc;
+
+
+
 -- requete 9
 
 drop table pilote_expert;
 
 create table if not exists pilote_expert
 (
-    id        uuid primary key,
+    id        uuid primary key
+        references pilote,
     date      date,
     estExpert boolean
 );
@@ -386,26 +447,41 @@ where not exists( -- vérification que l'on n'insére pas une ligne déjà prés
 -- requete 10
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+drop table aéroportsujets;
+
 create table if not exists aéroportsujets
 (
-    id    uuid primary key,
-    code  varchar(8),
-    sujet text
+    id           uuid default uuid_generate_v4() primary key not null,
+    aéroportCode varchar(8)                                  not null
+        constraint fk_aéroportCode
+            references aéroport,
+    sujetAbonné  text                                        not null
 );
 
+insert into aéroportsujets(id, aéroportCode, sujetAbonné)
+values (default, 'AKN', 'mobilité');
+insert into aéroportsujets(id, aéroportCode, sujetAbonné)
+values (default, 'AKN', 'économie');
+insert into aéroportsujets(id, aéroportCode, sujetAbonné)
+values (default, 'AKN', 'écologie');
 
 
-insert into aéroportsujets(id, code, sujet)
-    (
-        select uuid_generate_v1(), 'AKN', 'mobilité'
-    );
-
-
-drop table aéroportsujets;
+drop table discussion;
 
 create table if not exists discussion
 (
-    id         uuid primary key,
-    message    text,
-    expéditeur varchar(8)
+    id             uuid default uuid_generate_v4() primary key not null,
+    message        text                                        not null,
+    expéditeurCode varchar(8)                                  not null
+        constraint fk_expéditeurCode
+            references aéroport,
+    sujet          text                                        not null
 );
+
+insert into discussion(id, message, expéditeurCode, sujet)
+values (default, 'il faut aller plus vite', 'AKN', 'mobilité');
+
+
+
+
+
