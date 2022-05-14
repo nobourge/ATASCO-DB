@@ -24,6 +24,18 @@
 %\usepackage[export]{adjustbox}
 \usepackage{adjustbox}
 
+\begin{comment}
+\usepackage{xcolor,colortbl}
+
+\newcommand{\mc}[2]{\multicolumn{#1}{c}{#2}}
+\definecolor{Gray}{gray}{0.85}
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+
+\newcolumntype{grey}{>{\columncolor{Gray}}c}
+\newcolumntype{white}{>{\columncolor{white}}c}
+
+\end{comment}
+
 
 \newcommand*{\MyIncludeGraphicsMaxSize}[2][]{%
 \begin{adjustbox}{max size={\textwidth}{\textheight}}
@@ -63,26 +75,38 @@ L’association doit créer une base de données. La 1ère étape consiste à cr
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{image/ATASCO-entity-relationship-diagram.png}
-    \caption{Diagramme entité-association partie 1}
+    \caption{Diagramme entité-association partie 1 }
     \label{fig:diag_p1}
 \end{figure}
 
-% \MyIncludeGraphicsMaxSize{image/ATASCO-entity-relationship-diagram.png}[h]
+\newpage<
 
-\newpage
-\subsection{Comparaison avec le modèle corrigé}
-%\MyIncludeGraphicsMaxSize{image/correction.png}[h]
+
 \begin{figure}[h]
     \centering
     \includegraphics[scale=0.6]{image/correction.png}
-    \caption{Diagramme entité-association corrigé}
+    \caption{Diagramme entité-association correction}
     \label{fig:diag_correction}
 \end{figure}
+
+\newpage
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{image/erd.png}
+    \caption{Diagramme entité-association partie 1 corrigé}
+    \label{fig:diag_p1_correction}
+\end{figure}
+
+\newpage
+
+\subsection{Comparaison entre le modèle de la phase 1 et le modèle corrigé}
 
 \begin{itemize}
     \item meilleure lisibilité sur la figure \ref{fig:diag_p1}
     \item pas de table Etat dans la figure \ref{fig:diag_p1} donc, perte de précision et risque de confusion car si l'état est encodé sous forme de code chez le passager et sous son nom complet chez l'aéroport les deux ne seront pas égaux
-    \item dans la figure \ref{fig:diag_correction} compagnie possède 0 à n avions (0 car cas extrême, moment de l'ajout dans database, nouvellement déclarée légalement, en faillite, transaction vente/rachat, etc.)
+
     \item "pilote operates" dans la figure \ref{fig:diag_p1} 0,1 vol faux, car le pilote peut être relié à plusieurs vols dans la database comme indiqué sur la figure \ref{fig:diag_correction} (0,n)
     \item un vol est opéré par un pilote et un copilote : cette possibilité est exclue par la figure \ref{fig:diag_correction}
     \item dans la figure \ref{fig:diag_p1} la clef du siège est composée de (aricraftid, row, number) alors que dans la figure \ref{fig:diag_correction} un id unique lui est attribué ce qui rend la manipulation des données plus facile.
@@ -92,57 +116,73 @@ L’association doit créer une base de données. La 1ère étape consiste à cr
     \item la relation P,e entre avion, avion de ligne et avions de fret dans la figure \ref{fig:diag_correction} permet de prendre en compte les avions de type autres alors que dans la figure \ref{fig:diag_p1}, seuls les avions de fret et de ligne étaient pris en compte
 \end{itemize}
 
-
 \newpage
 \section{Traduction relationnelle}
 \begin{itemize}
     \item Company(\underline{Id})
-    \item Aircraft(\underline{Id},CompanyId, MaximumTonnage,NumberOfSeats)
+    \newline
+    \item Aircraft(\underline{Id}, CompanyId, MaximumTonnage, NumberOfSeats)
     \subitem Aircraft.CompanyId ref Company.Id
+    \newline
 
-    \item Airport(\underline{AirportCode},City,State)
-    \item Flight(\underline{Id},AircraftId,StartAirport,EndAirport,ArrivalTime,DepartureTime,Distance)
+    \item State(\underline{Code}, Name)
+    \newline
+
+    \item Airport(\underline{AirportCode}, City, State)
+    \subitem Airport.State ref State.Code
+    \newline
+
+    \textbf{Requête 10 uniquement}
+    \hline
+    \newline
+
+    \item Discussion(\underline{Id}, Message, SenderCode, Subject)
+    \subitem Discussion.SenderCode ref Airport.Code
+    \newline
+
+    \item AirportSubject(\underline{Id}, AirportCode, SubscribedSubject)
+    \subitem AirportSubject.AirportCode ref Airport.Code
+    \newline
+    \hline
+    \textbf{Fin de la requête 10}
+    \newline
+
+    \item Flight(\underline{Id}, AircraftId, StartAirport, EndAirport, ArrivalTime, DepartureTime, Distance)
     \subitem Flight.AircraftId ref Aircraft.Id
     \subitem Flight.StartAirport ref Airport.AirportCode
     \subitem Flight.EndAirport ref Airport.AirportCode
-
+    \newline
     \subitem Contrainte :
     \subsubitem - StartAiport doit être différent de EndAirport
     \subsubitem - DepartureTime (moment de départ) < ArrivalTime (moment d'arrivée)
     \subsubitem - Distance > 0
+    \newline
 
-    \item Person(\underline{SSN}, FirstName,Name,AdressStreet,AdressNumber,AdressPC,AdressState,\underline{LicenseNumber},FrequentTraveller)
+    \item Person(\underline{SSN}, FirstName, Name, AdressStreet, AdressNumber, AdressPC, AdressState, \underline{LicenseNumber}, FrequentTraveller)
+    \subitem Person.AdressState ref State.Code
+    \newline
 
-    \item FlightPilot(\underline{FlightId, PilotLicense})
-    \subitem FlightPilot.FlightId ref Flight.Id
-    \subitem FlightPilot.PilotLicense ref Person.LicenseNumber
-
-    \item FlightPerson(\underline{FlightId, PersonId})
-    \subitem FlightPerson.FlightId ref Flight.Id
-    \subitem FlightPerson.PersonId ref Person.Id
-
-    \item FlightTicket(\underline{PassengerSSN,FlightId},Price)
+    \item FlightTicket(\underline{PassengerSSN, FlightId}, Price, SeatId)
     \subitem FlightTicket.PassengerSSN ref Person.SSN
-    \subitem FlightTicket.FlightId ref Flight.id
+    \subitem FlightTicket.FlightId ref Flight.Id
+    \subitem FlightTicket.SeatId ref Seat.Id
+    \newline
 
     \item Seat(\underline{AircraftId, Row, Number}, PassengerSSN)
     \subitem Seat.AircraftId ref Aircraft.Id
     \subitem Seat.PassengerSSN ref Person.Id
 
-    \item SeatFlight(\underline{SeatRow, SeatNumber, FlightId})
-    \subitem SeatFlight.SeatRow ref Seat.Row
-    \subitem SeatFlight.SeatNumber ref Seat.Number
-    \subitem SeatFlight.FlightId ref Flight.Id
-
 \end{itemize}
 
+
+
+
 \section{Justification}
-Dans le tableau FLightPilot, LicenseNumber est une clé car il est unique pour chaque pilote. Un pilote est une personne, alors LicenseNumber est mis comme une clé secondaire dans le tableau Person.
-
-\newline
-
 Un vol est opéré par 2 pilotes, un capitaine et un copilote.
 \newline
+Le but d'ATASCO est d'aider les compagnies dans leur activité, une compagnie doit posséder un avion minimum pour être enregistrée.
+
+
 Beaucoup de requêtes n'ont pas de traduction en algèbre relationnel, calcul tuple car elles utilisent des fonctions qui ne sont pas (simplement) traduisible dans ce formalisme t.q. count, avg, window function, etc.
 \newpage
 
@@ -175,34 +215,49 @@ where réservation.voyageurid = pilote.id;
 \subsection{Requête 3}
 \subsubsection{SQL}
 \begin{verbatim}
-select *
-from vol
-where id = (
-    select volleplusfrequenté.volid
-    from (
-             select count(voyageurid) as nombredepassager, réservation.volid
-             from réservation
-             group by réservation.volid
-             order by nombredepassager desc
-             limit 1
-         ) as volleplusfrequenté
-);
+with volPassager as (select count(voyageurid) as nombredepassager, réservation.volid
+                     from réservation
+                     group by réservation.volid
+                     order by nombredepassager desc)
+
+select volPassager.volid
+from volPassager
+where volPassager.nombredepassager = (select max(volPassager.nombredepassager) from volPassager);
 \end{verbatim}
 \newpage
 
 \subsection{Requête 4}
 \subsubsection{SQL}
 \begin{lstlisting}
-select distinct vol.piloteid
+select vol.piloteid
 from vol
 except
-select distinct vol.piloteid
+select vol.piloteid
 from vol,
      aviondefret
 where vol.avionid = aviondefret.id;
+
+\end{lstlisting}
+
+---------------------------------------------
+
+Si la base de données contient d'autres types d'avions que ceux de ligne ou fret:
+
+\begin{lstlisting}
+
+select vol.piloteid
+from vol,
+     aviondeligne
+where vol.avionid = aviondeligne.id
+except
+select vol.piloteid
+from vol,
+     aviondefret
+where vol.avionid = aviondefret.id;
+
 \end{lstlisting}
 \subsubsection{Algèbre relationnel}
-\[piloteslignes(piloteid) \xleftarrow{} \{\pi_{pilotedid} [\sigma_{avionid=aviondeligne.id}(vol, aviondeligne) - \sigma_{avionid=aviondefret.id}(vol, aviondefret)]\} \]
+\[piloteslignes(piloteid) \xleftarrow{} \{\pi_{piloteid} [vol - \sigma_{avionid=aviondefret.id}(vol, aviondefret)]\} \]
 \subsubsection{Calcul tuple}
 %\[\{\ v.piloteid\; | \;vol(v) \wedge  \exists a ( aviondeligne(a) \wedge v.avionid = a.id ) \wedge \lnot \exists f (aviondefret(f) \wedge  f.id = v.avionid) \}\]
 \[\{\ p.piloteid\; | \;pilote(p) \wedge  \forall v\;vol(v) \xrightarrow{} ( p.id = v.piloteid \wedge \lnot \exists a(aviondefret(a) \wedge v.avionid = a.id)) \}\]
@@ -244,16 +299,19 @@ group by vol.heuredépart::date;
 \subsection{Requête 6}
 \subsubsection{SQL}
 \begin{verbatim}
-select distinct aller.heurearrivee, retour.heuredepart
+select distinct aller.id as volAller,
+                aller.heuredépart::time,
+                retour.id as volRetour,
+                retour.heuredépart::time
 from vol as aller,
-     vol as retour,
-     aviondeligne
-where aller.heuredepart::time > '07:00:00'
-  and aller.heuredepart::date = retour.heuredepart::date
-  and aller.heurearrivée::time < retour.heuredepart::time
-  and retour.heuredepart >= aller.heurearrivée + '07:00:00'
-  and aller.aeroportarriveecode = retour.aeroportdepartcode
-  and aller.aeroportdepartcode = retour.aeroportarriveecode;
+     vol as retour
+where aller.heuredépart::time > '07:00:00'
+  and aller.heuredépart::date = retour.heuredépart::date
+  and retour.heuredépart >= aller.heurearrivée + '07:00:00'
+  and aller.aéroportarrivéecode = retour.aéroportdépartcode
+  and aller.aéroportdépartcode = retour.aéroportarrivéecode
+  and aller.avionid in (select aviondeligne.id from aviondeligne)
+  and retour.avionid in (select aviondeligne.id from aviondeligne);
 \end{verbatim}
 \newpage
 
@@ -262,45 +320,80 @@ where aller.heuredepart::time > '07:00:00'
 \begin{verbatim}
 select avg(companyidpassager.nombredepassager), company.nom
 from company
-join(
+         join(
     select avion.compagnieid, avionpassager.nombredepassager
     from avion
-    join (
+             join (
         select vol.avionid, passagervol.nombredepassager
         from vol
-        join (
-            select count(réservation.voyageurid) as nombredepassager, reservation.volid
+                 join (
+            select count(réservation.voyageurid) as nombredepassager, réservation.volid
             from réservation
-            group by reservation.volid
-            having count(reservation.voyageurid)<20
-            ) as passagervol
-        on passagervol.volid = vol.id
-        ) as avionpassager
-    on avion.id = avionpassager.avionid
-    ) as companyidpassager
-on company.id = companyidpassager.compagnieid
+            group by réservation.volid
+            having count(réservation.voyageurid) < 20
+        ) as passagervol
+                      on passagervol.volid = vol.id
+    ) as avionpassager
+                  on avion.id = avionpassager.avionid
+) as companyidpassager
+             on company.id = companyidpassager.compagnieid
 group by company.nom;
+
 \end{verbatim}
+
+
 \newpage
 
 \subsection{Requête 8}
 \subsubsection{SQL}
 \begin{verbatim}
-select volspilotes.piloteid, count(piloteid) as jourssconsecutifs
+with volsEnchainés as (
+    select v.piloteid,
+           v.heuredépart::date,
+           (dense_rank() over (order by v.heuredépart::date) -
+            row_number() over (partition by v.piloteid order by v.heuredépart::date)) as diffId
+    from (
+             select vol.piloteid,
+                    vol.heuredépart::date,
+                    lag(vol.heuredépart::date)
+                    over (partition by vol.piloteid order by vol.heuredépart::date) as heuredépartPrécédent
+             from vol) v
+    where v.heuredépartPrécédent is NULL or v.heuredépart > v.heuredépartPrécédent
+    order by v.piloteid, v.heuredépart::date
+)
+
+select max(vE.jours) as joursConsécutif, vE.piloteid
 from (
-         select vol.piloteid, -- listes des vols groupé par pilotes et leur dernier vol
-                vol.heuredepart::date,
-                vol.heurearrivée::date,
-                lag(vol.heuredépart::date) -- départ du dernier vol
-                over (partition by vol.piloteid order by vol.heuredépart)  as départderniervol,
-                lag(vol.heurearrivée::date)
-                over (partition by vol.piloteid order by vol.heurearrivée) as arrivéederniervol
-         from vol) volspilotes
-where volspilotes.heuredépart = volspilotes.départderniervol + interval '1 day'     -- vols consecutifs
-   or volspilotes.heuredépart = volspilotes.arrivéederniervol + interval '1 day'    -- condition si le dernier vol s'étale sur deux jours
-group by volspilotes.piloteid
-order by jourssconsecutifs desc;
+         select count(volsEnchainés.diffId) as jours, volsEnchainés.piloteid
+         from volsEnchainés
+         group by volsEnchainés.piloteid, volsEnchainés.diffId
+     ) vE
+group by vE.piloteid
+order by joursConsécutif desc;
 \end{verbatim}
+
+\begin{figure}[H]
+\begin{center}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        Pilote & Date & IdInterne & Id & Îlots($\Delta$Id)\\
+
+        \hline
+        45d2a577-3734-4241-91eb-d789d78d18a4 & 12-05-22 & 1 & 3 & 2 \\
+        & 13-05-22 & 2 & 4 & 2\\
+        & 14-05-22 & 3 & 5 & 2\\
+        \hline
+        24e508fd-30d0-4172-bc4c-5cc6a789197f & 10-05-22 & 1 & 1 & 0 \\
+        & 11-05-22 & 2 & 2 & 0 \\
+        & 13-05-22 & 3 & 4 & 1 \\
+        \hline
+    \end{tabular}
+\end{center}
+    \caption{Exemple de table intermédiaire illustrant la résolution de la requête 8}
+    \label{fig:requete8}
+\end{figure}
+
+
 \newpage
 
 \subsection{Requête 9}
@@ -336,7 +429,7 @@ select split_part(temp_pilote_expert.id_expert, '--', 2)::uuid,
            else false
            end
 from temp_pilote_expert
-where not exists( -- verification que l'on n'insere pas une ligne deja presenten
+where not exists( -- verification que l'on n'insere pas une ligne deja présente
         select pilote_expert.id
         from pilote_expert
         where id = split_part(temp_pilote_expert.id_expert, '--', 2)::uuid
@@ -350,29 +443,32 @@ where not exists( -- verification que l'on n'insere pas une ligne deja presenten
 
 %\begin{lstlisting}[language=SQL]
 \begin{verbatim}
-
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
-
-create table if not exists aeroportsujets
+create table if not exists aéroportsujets
 (
-    id    uuid primary key,
-    code  varchar(8),
-    sujet text
+    id           uuid default uuid_generate_v4() primary key not null,
+    aéroportCode varchar(8)                                  not null
+        constraint fk_aéroportCode
+            references aéroport,
+    sujetAbonné  text                                        not null
 );
 
 
-insert into aeroportsujets(id, code, sujet)
-    (
-        select uuid_generate_v1(), 'AKN', 'mobilité'
-    );
+insert into aéroportsujets(id, aéroportCode, sujetAbonné)
+values (default, 'AKN', 'mobilité');
+insert into aéroportsujets(id, aéroportCode, sujetAbonné)
+values (default, 'AKN', 'économie');
+insert into aéroportsujets(id, aéroportCode, sujetAbonné)
+values (default, 'AKN', 'écologie');
 
 
 create table if not exists discussion
 (
-    id         uuid primary key,
-    message    text,
-    expediteur varchar(8)
+    id             uuid default uuid_generate_v4() primary key not null,
+    message        text                                        not null,
+    expéditeurCode varchar(8)                                  not null
+        constraint fk_expéditeurCode
+            references aéroport,
+    sujet          text                                        not null
 );
 
 \end{verbatim}

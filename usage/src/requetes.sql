@@ -47,6 +47,7 @@ group by réservation.volid;
 select distinct réservation.volid
 from réservation;
 
+/*
 -- information sur le vol le plus peuplé v.1
 select vol.id, volleplusfrequenté.nombredepassager
 from vol
@@ -59,6 +60,8 @@ from vol
 ) as volleplusfrequenté
               on vol.id = volleplusfrequenté.volid and volleplusfrequenté.nombredepassager = max(volleplusfrequenté.nombredepassager)
 
+
+ */
 
 select vol.id, vollesplusfrequenté.nombredepassager
 from vol
@@ -207,6 +210,7 @@ select vol.id
 from vol
 where vol.heuredépart::time >= '07:00:00';
 
+/*
 -- liste des paires de vols décollant le même jour pas opti runtime: 8s446ms
 select distinct aller.id, retour.id
 from vol as aller,
@@ -214,6 +218,8 @@ from vol as aller,
 where aller.heuredépart::date = retour.heuredépart::date
   and aller.id <> retour.id;
 
+
+ */
 
 -- listes des paires de vols de ligne décollant le même jour
 select distinct aller.id, aller.avionid, retour.id, retour.avionid
@@ -228,7 +234,7 @@ where aller.heuredépart::date = retour.heuredépart::date
 
 -- paires de vols décollant après 7am, le même jour et ayant un interval de 7h entre chaque vol
 
-select aller.id, retour.id -- TODO truc bizarre pas de résultat ?
+select aller.id, retour.id
 from vol as aller,
      vol as retour,
      aviondeligne
@@ -243,7 +249,10 @@ where aller.heuredépart::date = retour.heuredépart::date
 
   and retour.heuredépart >= aller.heurearrivée + interval '7 hours';
 
-select distinct aller.id as volAller, aller.heuredépart::time, retour.id as volRetour, retour.heuredépart::time
+select distinct aller.id as volAller,
+                aller.heuredépart::time,
+                retour.id as volRetour,
+                retour.heuredépart::time
 from vol as aller,
      vol as retour
 where aller.heuredépart::time > '07:00:00'
@@ -262,15 +271,15 @@ from company
     select avion.compagnieid, avionpassager.nombredepassager
     from avion
              join (
-        select vol.avionid, passagervol.nombredepassager
-        from vol
-                 join (
-            select count(réservation.voyageurid) as nombredepassager, réservation.volid
-            from réservation
-            group by réservation.volid
-            having count(réservation.voyageurid) < 20
-        ) as passagervol
-                      on passagervol.volid = vol.id
+                select vol.avionid, passagervol.nombredepassager
+                from vol
+                         join (
+                            select count(réservation.voyageurid) as nombredepassager, réservation.volid
+                            from réservation
+                            group by réservation.volid
+                            having count(réservation.voyageurid) < 20
+                ) as passagervol
+                              on passagervol.volid = vol.id
     ) as avionpassager
                   on avion.id = avionpassager.avionid
 ) as companyidpassager
@@ -383,9 +392,9 @@ with volsEnchainés as (
 
                     vol.heuredépart::date,
                     lag(vol.heuredépart::date)
-                    over (partition by vol.piloteid order by vol.heuredépart::date) as départPrécédent
+                    over (partition by vol.piloteid order by vol.heuredépart::date) as heuredépartPrécédent
              from vol) v
-    where v.départPrécédent is NULL or v.heuredépart > v.départPrécédent
+    where v.heuredépartPrécédent is NULL or v.heuredépart > v.heuredépartPrécédent
     order by v.piloteid, v.heuredépart::date
 )
 select max(vE.jours) as joursConsécutif, vE.piloteid
