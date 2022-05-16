@@ -147,11 +147,6 @@ les séances de travaux pratiques (pas de mails ou messages sur Teams).
 gnoyr_VQ=FIL&QO_fu146_anzr=Nv4%20Pn44vr45 et ont été enrichies de
 données fictives complémentaires à des fins d’exercice.
 ------------------------------------------------------------------------------------------------------------------------------------------
-
-ATASCO-entity-relationship-diagram            |  correction
-:-------------------------:|:-------------------------:
-![](./design/entity-relationship/entity/diagram/ATASCO-entity-relationship-diagram.svg)| ![](./design/entity-relationship/entity/diagram/entities-correction-proposition.svg)
-  
   
 L’Air Travel Association for Statistics, Computing and Optimization (ATASCO) a reçu des données de différentes compagnies aériennes US, avec l’objectif d’aider ces compagnies à améliorer leurs offres et réduire leurs coûts.
 L’association doit créer une base de données. La 1ère étape consiste à créer un modèle entité-association ainsi qu’un modèle relationnel.
