@@ -8,6 +8,7 @@ Schéma - modèle entité-association
 ATASCO-entity-relationship-diagram
 ![Visualization of the repository visualizer diagram](./diagram.svg)
 
+![Visualization of the ATASCO-entity-relationship-diagram.svg](./design/entity-relationship/entity/diagram/erd.svg)
 Partie II
 N.B. : Cette deuxième partie concerne exclusivement les étudiants inscrits au cours
 INFOH303. Les consignes ci-dessous s’ajoutent et complètent les consignes données
@@ -34,6 +35,7 @@ Proposez le SQL de chaque requête ainsi que si possible, l’algèbre relationn
 calcul relationnel tuple. Dans le cas de l'algèbre relationnelle et du calcul tuple, il se peut
 que cela nécessite une syntaxe non vue au cours ou au TP. Dans ce cas, vous n'êtes pas
 tenus de les réaliser.
+
 Requête 1
 Comptez le nombre de vols effectués par des avions de fret.
 Requête 2
@@ -145,11 +147,6 @@ les séances de travaux pratiques (pas de mails ou messages sur Teams).
 gnoyr_VQ=FIL&QO_fu146_anzr=Nv4%20Pn44vr45 et ont été enrichies de
 données fictives complémentaires à des fins d’exercice.
 ------------------------------------------------------------------------------------------------------------------------------------------
-
-![Visualization of the ATASCO-entity-relationship-diagram.svg](./design/entity-relationship/entity/diagram/ATASCO-entity-relationship-diagram.svg)
-![Visualization of the entities-correction-proposition.svg](./design/entity-relationship/entity/diagram/entities-correction-proposition.svg)
-
-
 
 ATASCO-entity-relationship-diagram            |  correction
 :-------------------------:|:-------------------------:
